@@ -1,0 +1,62 @@
+/*
+* 
+* Advanced C Programming Masterclass: Pointers & Memory in C
+* 
+* @theme Files - Advanced Content
+* @brief Writing a Structure Record to a File
+* @author Vlad Budnitski 
+* @date 17/03/2023
+* 
+*/
+
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+typedef struct point
+{
+    int x;
+    int y;
+}POINT;
+
+
+int main()
+{
+    POINT point = {3,5};
+    POINT pointTxt;
+    FILE* file = fopen("myFile.bin", "wb");
+    FILE* fileTxt = fopen("myFileTxt.txt", "w");
+    if (file)
+    {
+        printf("File was successfully opened for binary writing..\n");
+        fwrite(&point, sizeof(POINT), 1, file);
+        fclose(file);
+    }
+    if (fileTxt)
+    {
+        printf("FileTxt was successfully opened for writing..\n");
+        printf("Enter x and y coordinates separated by a space: ");
+        scanf("%d %d", &pointTxt.x, &pointTxt.y);
+        fprintf(fileTxt, "%d %d", pointTxt.x, pointTxt.y);
+        fclose(fileTxt);
+
+    }
+   
+    return 0;
+}
+
+
+
+
+
+    
+
+
+
+
+
+
