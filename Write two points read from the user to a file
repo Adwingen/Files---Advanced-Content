@@ -1,0 +1,69 @@
+/*
+* 
+* Advanced C Programming Masterclass: Pointers & Memory in C
+* 
+* @theme Files - Advanced Content
+* @brief Write two points read from the user to a file
+* @author Vlad Budnitski 
+* @date 17/03/2023
+* 
+*/
+
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+typedef struct point
+{
+    int x;
+    int y;
+}POINT;
+
+
+int main()
+{
+    POINT point;
+    POINT pointTxt;
+
+    printf("Enter x1 coordinates: ");
+    scanf("%d", &point.x);
+    printf("Enter y1 coordinates: ");
+    scanf("%d", &point.y);
+    printf("Enter x2 coordinates: ");
+    scanf("%d", &pointTxt.x);
+    printf("Enter y2 coordinates: ");
+    scanf("%d", &pointTxt.y);
+
+    FILE* file = fopen("myFile.bin", "wb");
+    FILE* fileTxt = fopen("myFileTxt.txt", "w");
+    if (file)
+    {
+        printf("File was successfully opened for binary writing..\n");
+        fwrite(&point, sizeof(POINT), 1, file);
+        fclose(file);
+    }
+    if (fileTxt)
+    {
+        printf("FileTxt was successfully opened for writing..\n");
+        fprintf(fileTxt, "%d %d", pointTxt.x, pointTxt.y);
+        fclose(fileTxt);
+    }
+   
+    return 0;
+}
+
+
+
+
+
+    
+
+
+
+
+
+
