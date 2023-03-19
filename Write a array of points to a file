@@ -1,0 +1,86 @@
+/*
+* 
+* Advanced C Programming Masterclass: Pointers & Memory in C
+* 
+* @theme Files - Advanced Content
+* @brief Write a array of points to a file
+* @author Vlad Budnitski 
+* @date 17/03/2023
+* 
+*/
+
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <sys/stat.h>
+
+
+
+typedef struct point
+{
+    int x;
+    int y;
+}POINT;
+
+bool fileExists(const char* fileName)
+{
+    struct stat buffer;
+    return (stat(fileName, &buffer) == 0);
+}
+
+int main()
+{
+    int i;
+    POINT point[5] = {{1,2},{3,4},{5,6},{7,8},{9,10}};
+    POINT pointTxt[5] = {{1,2},{3,4},{5,6},{7,8},{9,10}};
+    char nameFileBin[50];
+    char nameFileTxt[50];
+
+    printf("Introduza o nome do ficheiro binario: ");
+    scanf("%s", &nameFileBin);
+    if (fileExists(nameFileBin))
+        printf("Ficheiro %s ja existe!\n",nameFileBin);
+    else
+        printf("Ficheiro nao existe! Vai ser criado novo ficheiro!\n");
+    printf("Introduza o nome do ficheiro de texto: ");
+    scanf("%s", &nameFileTxt);
+    if (fileExists(nameFileTxt))
+        printf("Ficheiro %s ja existe!\n",nameFileTxt);
+    else
+        printf("Ficheiro nao existe! Vai ser criado novo ficheiro!\n");
+
+    FILE* file = fopen(nameFileBin, "wb");
+    FILE* fileTxt = fopen(nameFileTxt, "w");
+    if (file)
+    {
+        printf("File was successfully opened for binary writing..\n");
+        int writeenElements = fwrite(point, sizeof(POINT), 5, file);
+        printf("Sucessfully Written Elements (points): %d\n", writeenElements);
+        fclose(file);
+    }
+    if (fileTxt)
+    {
+        printf("FileTxt was successfully opened for writing..\n");
+        for (i = 0; i < 5; i++)
+            fprintf(fileTxt, "%d %d ", pointTxt[i].x, pointTxt[i].y);
+        fclose(fileTxt);
+    }
+   
+    return 0;
+}
+
+
+
+
+
+    
+
+
+
+
+
+
