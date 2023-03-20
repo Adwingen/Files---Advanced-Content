@@ -1,0 +1,93 @@
+/*
+* 
+* Advanced C Programming Masterclass: Pointers & Memory in C
+* 
+* @theme Files - Advanced Content
+* @brief Searcing for a specific point in the Binary file
+* @author Vlad Budnitski 
+* @date 19/03/2023
+* 
+*/
+
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <sys/stat.h>
+
+
+
+typedef struct point
+{
+    int x;
+    int y;
+}POINT;
+
+bool fileExists(const char* fileName)
+{
+    struct stat buffer;
+    return (stat(fileName, &buffer) == 0);
+}
+
+int main()
+{
+   
+    POINT targetPoint; // the point you looking for
+    POINT pointInFile; // will be used to read a point in a file
+    POINT newInput;
+    int j = 0;
+    bool findPoint = false;
+
+    FILE *fileBin = fopen("myFile.bin", "rb+");
+    printf("What is the point you´re looking for?\n");
+    printf("Enter x: ");
+    scanf("%d", &targetPoint.x);
+    printf("Enter y: ");
+    scanf("%d", &targetPoint.y);
+
+    if (fileBin)
+    {
+        while (!feof(fileBin))
+        {
+            fread(&pointInFile, sizeof(POINT), 1, fileBin);
+            if (pointInFile.x == targetPoint.x && pointInFile.y == targetPoint.y)
+            {
+                printf("The point x (%d) and the point y (%d) was found in the found!!\n",targetPoint.x,targetPoint.y);
+                printf("Point number in the file (%d)\n",j);
+                findPoint = true;
+
+                printf("Enter new number x: ");
+                scanf("%d", &newInput.x);
+                printf("Enter new number y: ");
+                scanf("%d", &newInput.y);
+
+                pointInFile.x = newInput.x;
+                pointInFile.y = newInput.y;
+
+               
+                // Seek back to the beginning of the current record
+                fseek(fileBin, -8, SEEK_CUR);
+
+                // Write the updated record to the file
+                fwrite(&pointInFile, sizeof(POINT), 1, fileBin);
+
+                fflush(fileBin); // make sure the write is complete
+
+                printf("Point x pass the (%d) to (%d) \n", targetPoint.x, newInput.x);
+                printf("Point y pass the (%d) to (%d) \n", targetPoint.y, newInput.y);
+                break;
+            }
+            j++;
+        }
+        
+        fclose(fileBin);
+        if(!findPoint)
+            printf("Sorry, the point x (%d) and the point y (%d) was NOT found in the file!!\n", targetPoint.x, targetPoint.y);
+    }
+
+   
+    return 0;
+}
