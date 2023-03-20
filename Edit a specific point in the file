@@ -1,0 +1,74 @@
+/*
+* 
+* Advanced C Programming Masterclass: Pointers & Memory in C
+* 
+* @theme Files - Advanced Content
+* @brief Edit a specific point in the file
+* @author Vlad Budnitski 
+* @date 20/03/2023
+* 
+*/
+
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <sys/stat.h>
+
+
+
+typedef struct point
+{
+    int x;
+    int y;
+}POINT;
+
+
+
+int main()
+{
+   
+    POINT myPoint;
+    int choice;
+
+    printf("What is the point you would like to edit? ");
+    scanf("%d", &choice);
+
+    //open a existing file em mode "reading" and "writing"
+    FILE* file = fopen("myFile.bin", "rb+");
+
+    if (file)
+    {
+        // navigate to the point in the file
+        fseek(file, (choice - 1) * sizeof(POINT), SEEK_SET);
+
+        printf("Enter new value of x: ");
+        scanf("%d", &myPoint.x);
+        printf("Enter new value of y: ");
+        scanf("%d", &myPoint.y);
+
+        //update the record
+        fwrite(&myPoint, sizeof(POINT), 1, file);
+        fclose(file);
+
+    }
+
+
+   
+    return 0;
+}
+
+
+
+
+
+    
+
+
+
+
+
+
